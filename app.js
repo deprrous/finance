@@ -45,17 +45,30 @@ var uiController = (function () {
     } else return "0";
     return formattedAmount;
   };
-  // var nodeListForEach = function (list, callback) {
-  //   for (var i = 0; i < list.length; i++) {
-  //     callback(list[i], i);
-  //   }
-  // };
+  var nodeListForEach = function (list, callback) {
+    for (var i = 0; i < list.length; i++) {
+      callback(list[i], i);
+    }
+  };
   return {
     displayDate: function () {
       var today = new Date();
 
       document.querySelector(DOMstrings.dateLabel).textContent =
         today.getFullYear() + " оны " + today.getMonth() + " сарын";
+    },
+    changeType: function () {
+      var fields = document.querySelectorAll(
+        DOMstrings.inputType +
+          ", " +
+          DOMstrings.inputDescription +
+          ", " +
+          DOMstrings.inputValue
+      );
+      nodeListForEach(fields, function (el) {
+        el.classList.toggle("red-focus");
+      });
+      document.querySelector(DOMstrings.addBtn).classList.toggle("red");
     },
     displayPercentages: function (allPercentages) {
       var elements = document.querySelectorAll(DOMstrings.itemPercentageLabel);
@@ -322,6 +335,11 @@ var appController = (function (uiController, financeController) {
         ctrlAddItem();
       }
     });
+
+    document
+      .querySelector(DOM.inputType)
+      .addEventListener("change", uiController.changeType);
+
     document
       .querySelector(DOM.containerDiv)
       .addEventListener("click", function (event) {
